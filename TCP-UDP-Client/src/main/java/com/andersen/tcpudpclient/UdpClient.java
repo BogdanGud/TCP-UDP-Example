@@ -26,7 +26,6 @@ class UdpClient {
                 socket.receive(receivePacket);
                 String incomingString = new String(receivePacket.getData());
                 System.out.println("Answer from server: " + incomingString.trim());
-                System.out.println("Type something and press enter: ");
             }
         } catch (UnknownHostException ex) {
             System.out.println("UnknownHostException caught " + ex);
