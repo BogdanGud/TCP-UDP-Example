@@ -13,7 +13,7 @@ class TCPSocketService extends Thread {
             //noinspection InfiniteLoopStatement
             while (true) {
                 Socket incoming = serverSocket.accept();
-                Thread t = new Thread(new MyListener(incoming, clientNumber++));
+                Thread t = new Thread(new MyListener(incoming, ++clientNumber));
                 t.start();
             }
         } catch (IOException e) {
