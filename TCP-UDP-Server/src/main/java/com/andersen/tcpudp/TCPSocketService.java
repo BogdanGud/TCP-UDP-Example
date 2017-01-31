@@ -3,11 +3,12 @@ package com.andersen.tcpudp;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
-class TCPSocketService extends Thread {
+public class TCPSocketService extends Thread {
     private int clientNumber = 0;
 
-    void startListener(int portNumber) {
+    public void startListener(int portNumber) {
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             System.out.println("The socket-listener is running");
             //noinspection InfiniteLoopStatement
@@ -28,7 +29,7 @@ class TCPSocketService extends Thread {
         MyListener(Socket socket, int clientNumber) {
             this.socket = socket;
             this.clientNumber = clientNumber;
-            log("New connection at " + socket);
+            log("New client with ID: " + clientNumber + " connected at " + socket);
         }
 
         public void run() {
@@ -42,19 +43,22 @@ class TCPSocketService extends Thread {
                         break;
                     }
                     String output = input.toUpperCase();
+                    TimeUnit.MILLISECONDS.sleep(1000);
                     out.write(output);
                     out.write("\n");
                     out.flush();
                 }
             } catch (IOException e) {
-                log("Error handling client: " + e);
+                log("Error handling client -  " + clientNumber + ": " + e);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             } finally {
                 try {
                     socket.close();
                 } catch (IOException e1) {
                     log("Couldn't close a socket" + e1);
                 }
-                log("Connection closed");
+                log("Client ID - " + clientNumber + " disconnected. Connection closed");
             }
         }
 
